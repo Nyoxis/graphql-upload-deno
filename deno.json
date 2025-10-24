@@ -1,0 +1,9 @@
+{
+  "tasks": {
+    "test": "deno test --allow-net --allow-import --allow-env"
+  },
+  "imports": {
+    "@remix-run/headers": "https://raw.githubusercontent.com/Nyoxis/remix/refs/heads/readable-stream-content/packages/headers/src/index.ts",
+    "@remix-run/multipart": "https://raw.githubusercontent.com/Nyoxis/remix/refs/heads/readable-stream-content/packages/multipart-parser/src/index.ts"
+  }
+}
