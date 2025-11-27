@@ -49,4 +49,4 @@ export {
   type GraphQLScalarTypeConfig,
   GraphQLError,
   GraphQLScalarType,
-} from 'npm:graphql@^16.11.0';
+} from 'npm:graphql@^16.10.0';

@@ -62,6 +62,5 @@ export function graphqlHttpWithUploadOak<
 
     ctx.response.status = res.status
     ctx.response.body = await res.text()
-    await next();
   };
 }
