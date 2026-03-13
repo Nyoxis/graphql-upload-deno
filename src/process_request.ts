@@ -222,6 +222,14 @@ export async function processRequest<T = GraphQLOperation | GraphQLOperation[]>(
     throw new MissingMapError()
   }
   // Detached async task for files upload
-  parseMultipartUploadRequest(fileUploadHandler, rejectAllUploads)
+  parseMultipartUploadRequest(fileUploadHandler, rejectAllUploads).catch(
+    (err) => {
+      /*
+       * This error is already handled by individual upload.reject(err) calls
+       * through rejectAllUploads handler. We catch it here to prevent
+       * unhandled promise rejection in the server.
+       */
+    },
+  );
   return operations
 }
