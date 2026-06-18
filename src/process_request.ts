@@ -1,18 +1,13 @@
 import {
-  GraphQLOperation,
-  UploadOptions,
   MultipartParseError,
   MaxFileSizeExceededError,
-  BufferedMultipartPart,
-  StreamedMultipartPart,
-
-  DEFAULT_MAX_FIELD_SIZE,
-  DEFAULT_MAX_FILE_SIZE,
-  DEFAULT_MAX_FILES,
-
+  type BufferedMultipartPart,
+  type StreamedMultipartPart,
+  parseMultipartRequestAsStreams,
   objectPath,
+} from "../deps.ts";
 
-  parseMultipartRequest,
+import {
   InvalidJSONError,
   TooManyFilesError,
   InvalidMapError,
@@ -22,11 +17,78 @@ import {
   MissingMapError,
   MissingOperationsError,
   FileMissingError
-} from "../deps.ts";
+} from "./upload-errors.ts";
+
+import {
+  DEFAULT_MAX_FIELD_SIZE,
+  DEFAULT_MAX_FILE_SIZE,
+  DEFAULT_MAX_FILES,
+} from "./validation.ts";
 
 import {
   Upload
 } from "./upload.ts"
+
+import type { IncomingMessage } from "node:http";
+
+export interface UploadOptions {
+  /**
+   * Maximum allowed size for non-file form fields (in bytes).
+   * This limits the size of text fields like 'operations' and 'map' JSON.
+   * @default 1_000_000 (1MB)
+   */
+  maxFieldSize?: number;
+
+  /**
+   * Maximum allowed size for uploaded files (in bytes).
+   * This limits the size of actual file content being uploaded.
+   * @default 5_000_000 (5MB)
+   */
+  maxFileSize?: number;
+
+  /**
+   * Maximum number of files allowed in a single request.
+   * @default Infinity
+   */
+  maxFiles?: number;
+
+  /**
+   * The maximum allowed size of a header in bytes.
+   * @default 8192 (8 KiB)
+   */
+  maxHeaderSize?: number;
+
+  /**
+   * The maximum allowed number of parts in the multipart message.
+   * @default 1000
+   */
+  maxParts?: number;
+
+  /**
+   * The maximum allowed aggregate size of all part content in bytes.
+   */
+  maxTotalSize?: number;
+
+  /**
+   * The queuing strategy used by the ReadableStream of each parsed part.
+   */
+  queuingStrategy?: QueuingStrategy<Uint8Array>;
+}
+
+export interface GraphQLOperation {
+  query: string;
+  operationName?: string | null;
+  variables?: Record<string, unknown> | null;
+}
+
+export type IncomingReq = Pick<
+  IncomingMessage,
+  'headers' | 'pipe' | 'unpipe' | 'once' | 'resume' | 'readableEnded'
+> & {
+  body?: string;
+  rawBody?: string;
+  req?: IncomingMessage;
+};
 
 // Creates helper to reject all pending uploads with an error
 type RejectAllUpload = (error: Error) => void
@@ -75,26 +137,29 @@ function setupUploadMap(
   const map = new Map<string, Upload>();
   for (const [fieldName, paths] of entries) {
     if (!Array.isArray(paths)) {
-      throw new InvalidMapError(`Paths is not an array in field ‘${fieldName}‘`)
+      throw new InvalidMapError(`Invalid type for the ‘map’ multipart field entry key ‘${fieldName}’ array`)
     }
     const upload = new Upload();
     map.set(fieldName, upload);
     for (const [index, path] of paths.entries()) {
       if (typeof path !== "string") {
-        throw new InvalidMapError(`Path index ${index} is not a string in field ‘${fieldName}‘`)
+        throw new InvalidMapError(`Invalid type for the ‘map’ multipart field entry key ‘${fieldName}’ array index ‘${index}’ value`)
       }
       try {
+        if (operationsPath.get(path) !== null) {
+          throw new Error("Invalid object path");
+        }
         operationsPath.set(path, map.get(fieldName)); // ensures it's the same object
       } catch {
-        throw new InvalidMapError(`Invalid object path for the path index ${index} in field ‘${fieldName}‘`)
+        throw new InvalidMapError(`Invalid object path for the ‘map’ multipart field entry key ‘${fieldName}’ array index ‘${index}’ value ‘${path}’`)
       }
     }
   }
   return map;
 }
 
-function createFileUploadHandler(map: Map<string, Upload>, options: Required<UploadOptions>): MultipartPartHandler {
-  const { maxFileSize, maxFiles } = options;
+function createFileUploadHandler(map: Map<string, Upload>, options: UploadOptions): MultipartPartHandler {
+  const { maxFileSize = DEFAULT_MAX_FILE_SIZE, maxFiles = DEFAULT_MAX_FILES } = options;
   let fileCount = 0
   return (part, _) => {
     if (part?.isFile) {
@@ -126,10 +191,23 @@ function createFileUploadHandler(map: Map<string, Upload>, options: Required<Upl
 }
 
 type MultipartPartHandler = (part: StreamedMultipartPart | null, lastTextPart: BufferedMultipartPart | undefined) => {done: boolean}
-function createMultipartUploadRequestParser(request: Request, options: Required<UploadOptions>) {
-  const { maxFieldSize, maxFileSize } = options;
+function createMultipartUploadRequestParser(request: Request, options: UploadOptions) {
+  const {
+    maxFieldSize = DEFAULT_MAX_FIELD_SIZE,
+    maxFileSize = DEFAULT_MAX_FILE_SIZE,
+    maxHeaderSize,
+    maxParts,
+    maxTotalSize,
+    queuingStrategy,
+  } = options;
   let lastTextPart: Promise<BufferedMultipartPart> | null
-  const multipartParser = parseMultipartRequest(request, { maxFileSize })
+  const multipartParser = parseMultipartRequestAsStreams(request, {
+    maxFileSize,
+    maxHeaderSize,
+    maxParts,
+    maxTotalSize,
+    queuingStrategy,
+  })
   return async function parseMultipartUploadRequest(handler: MultipartPartHandler, rejectAllUploads?: RejectAllUpload) {
     try {
       // for await doesn't work because interrupted iterator throws at unresolved promises
@@ -182,8 +260,12 @@ export async function processRequest<T = GraphQLOperation | GraphQLOperation[]>(
     maxFieldSize = DEFAULT_MAX_FIELD_SIZE,
     maxFileSize = DEFAULT_MAX_FILE_SIZE,
     maxFiles = DEFAULT_MAX_FILES,
+    maxHeaderSize,
+    maxParts,
+    maxTotalSize,
+    queuingStrategy,
   } = options ?? {};
-  const filledOptions = { maxFieldSize, maxFileSize, maxFiles };
+  const filledOptions = { maxFieldSize, maxFileSize, maxFiles, maxHeaderSize, maxParts, maxTotalSize, queuingStrategy };
 
   let operations: T | undefined;
   let fileUploadHandler: MultipartPartHandler | undefined;
@@ -223,7 +305,7 @@ export async function processRequest<T = GraphQLOperation | GraphQLOperation[]>(
   }
   // Detached async task for files upload
   parseMultipartUploadRequest(fileUploadHandler, rejectAllUploads).catch(
-    (err) => {
+    (_err) => {
       /*
        * This error is already handled by individual upload.reject(err) calls
        * through rejectAllUploads handler. We catch it here to prevent

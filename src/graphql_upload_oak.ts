@@ -4,13 +4,11 @@ import {
 
   OperationContext,
 
-  GraphQLOperation,
-  UploadOptions,
-
   Middleware,
   Request as OakRequest,
 } from "../deps.ts";
-import { processRequest as defaultProcessRequest } from "./process_request.ts";
+import { processRequest as defaultProcessRequest, GraphQLOperation, UploadOptions } from "./process_request.ts";
+import { validateOptions } from "./validation.ts";
 
 type ProcessRequestFn = <T = GraphQLOperation | GraphQLOperation[]>(
   request: Request,
@@ -34,12 +32,13 @@ export function graphqlHttpWithUploadOak<
   graphqlOption: GQLOptions<Request, { request: Request }, GqlContext> = {}
 ): Middleware {
   const { processRequest = defaultProcessRequest, ...uploadOptionsProcess } = uploadOptions;
+  const validatedOptions = validateOptions(uploadOptionsProcess);
   const handler = GraphQLHTTP<Request, GqlContext>({
     async parseRequestParams(req) {
       const contentType = req.raw.headers.get("content-type") || "";
       if (contentType.startsWith("multipart/form-data")) {
         // Parse multipart GraphQL upload
-        const params = await processRequest(req.raw, uploadOptionsProcess);
+        const params = await processRequest(req.raw, validatedOptions);
         if (Array.isArray(params)) {
           throw new Error('Batching is not supported');
         }
@@ -51,7 +50,7 @@ export function graphqlHttpWithUploadOak<
     },
     ...graphqlOption
   })
-  return async function graphqlHTTPWithUploadOakMiddleware(ctx, next) {
+  return async function graphqlHTTPWithUploadOakMiddleware(ctx, _next) {
     // cast Oak request into a normal Request
     if (!ctx.request.source) {
       throw new Error("no request")

@@ -13,13 +13,13 @@ import { Upload } from './upload.ts';
  *
  * @example Import usage
  * ```typescript
- * import { GraphQLUpload } from 'graphql-upload-ts';
+ * import { GraphQLUpload } from '@nyoxis/graphql-upload-deno';
  * ```
  *
  * @example Schema usage with GraphQL Tools
  * ```typescript
  * import { makeExecutableSchema } from '@graphql-tools/schema';
- * import { GraphQLUpload } from 'graphql-upload-ts';
+ * import { GraphQLUpload } from '@nyoxis/graphql-upload-deno';
  *
  * const schema = makeExecutableSchema({
  *   typeDefs: `
@@ -33,9 +33,10 @@ import { Upload } from './upload.ts';
  *     Upload: GraphQLUpload,
  *     Mutation: {
  *       uploadFile: async (_, { file }) => {
- *         const { filename, mimetype, createReadStream } = await file;
- *         const stream = createReadStream();
- *         // Process the file stream...
+ *         const { filename, mimetype, content } = await file;
+ *         // `content` is a standard Web API ReadableStream
+ *         const reader = content.getReader();
+ *         // Process the stream...
  *         return true;
  *       }
  *     }
@@ -70,4 +71,4 @@ const uploadScalarConfig: GraphQLScalarTypeConfig<Upload['promise'], never> = {
   },
 };
 
-export const GraphQLUpload = new GraphQLScalarType(uploadScalarConfig);
+export const GraphQLUpload: GraphQLScalarType = new GraphQLScalarType(uploadScalarConfig);

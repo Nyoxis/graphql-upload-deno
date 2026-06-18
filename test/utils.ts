@@ -1,4 +1,3 @@
-import { SuperHeaders } from '../dev_deps.ts'
 /**
  * from <https://github.com/Nyoxis/remix/blob/9cea56dcdc7596f706248e8492d9361282b4e20c/packages/multipart-parser/test/utils.ts>
  */
@@ -31,31 +30,23 @@ export function createMultipartMessage(
       pushLine(`--${boundary}`)
 
       if (typeof value === 'string') {
-        const headers = new SuperHeaders({
-          contentDisposition: {
-            type: 'form-data',
-            name,
-          },
-        })
-
-        pushLine(`${headers}`)
+        pushLine(`Content-Disposition: form-data; name="${name}"`)
         pushLine()
         pushLine(value)
       } else {
-        const headers = new SuperHeaders({
-          contentDisposition: {
-            type: 'form-data',
-            name,
-            filename: value.filename,
-            filenameSplat: value.filenameSplat,
-          },
-        })
+        let contentDisposition = `Content-Disposition: form-data; name="${name}"`
+        if (value.filename !== undefined) {
+          contentDisposition += `; filename="${value.filename}"`
+        }
+        if (value.filenameSplat !== undefined) {
+          contentDisposition += `; filename*="${value.filenameSplat}"`
+        }
+        pushLine(contentDisposition)
 
         if (value.mediaType) {
-          headers.contentType = value.mediaType
+          pushLine(`Content-Type: ${value.mediaType}`)
         }
 
-        pushLine(`${headers}`)
         pushLine()
         if (typeof value.content === 'string') {
           pushLine(value.content)

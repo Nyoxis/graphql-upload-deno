@@ -3,35 +3,43 @@
   "specifiers": {
     "jsr:@deno-libs/gql@*": "4.0.0",
     "jsr:@deno-libs/gql@4": "4.0.0",
+    "jsr:@nyoxis/multipart-parser-streaming@0.17.0": "0.17.0",
     "jsr:@oak/commons@1": "1.0.1",
-    "jsr:@oak/oak@^17.1.6": "17.1.6",
-    "jsr:@std/assert@1": "1.0.15",
-    "jsr:@std/assert@^1.0.13": "1.0.15",
+    "jsr:@oak/oak@^17.1.6": "17.2.0",
+    "jsr:@std/assert@1": "1.0.19",
+    "jsr:@std/assert@^1.0.13": "1.0.19",
+    "jsr:@std/assert@^1.0.19": "1.0.19",
     "jsr:@std/bytes@1": "1.0.6",
-    "jsr:@std/cli@^1.0.23": "1.0.23",
-    "jsr:@std/crypto@1": "1.0.5",
+    "jsr:@std/cli@^1.0.30": "1.0.30",
+    "jsr:@std/crypto@1": "1.1.0",
     "jsr:@std/encoding@1": "1.0.10",
     "jsr:@std/encoding@^1.0.10": "1.0.10",
-    "jsr:@std/fmt@^1.0.8": "1.0.8",
-    "jsr:@std/fs@^1.0.19": "1.0.19",
-    "jsr:@std/html@^1.0.5": "1.0.5",
+    "jsr:@std/expect@1": "1.0.19",
+    "jsr:@std/fmt@^1.0.10": "1.0.10",
+    "jsr:@std/fs@^1.0.24": "1.0.24",
+    "jsr:@std/html@^1.0.7": "1.0.7",
     "jsr:@std/http@0.224.5": "0.224.5",
-    "jsr:@std/http@1": "1.0.21",
-    "jsr:@std/http@^1.0.16": "1.0.21",
-    "jsr:@std/internal@^1.0.10": "1.0.12",
-    "jsr:@std/internal@^1.0.12": "1.0.12",
+    "jsr:@std/http@1": "1.1.1",
+    "jsr:@std/http@^1.0.16": "1.1.1",
+    "jsr:@std/internal@^1.0.12": "1.0.14",
+    "jsr:@std/internal@^1.0.13": "1.0.14",
+    "jsr:@std/internal@^1.0.14": "1.0.14",
     "jsr:@std/media-types@1": "1.1.0",
     "jsr:@std/media-types@^1.1.0": "1.1.0",
     "jsr:@std/net@^1.0.6": "1.0.6",
-    "jsr:@std/path@1": "1.1.2",
-    "jsr:@std/path@^1.1.2": "1.1.2",
-    "jsr:@std/streams@^1.0.13": "1.0.13",
-    "npm:@graphql-tools/schema@10.0.25": "10.0.25_graphql@16.10.0",
+    "jsr:@std/path@1": "1.1.5",
+    "jsr:@std/path@^1.1.4": "1.1.5",
+    "jsr:@std/path@^1.1.5": "1.1.5",
+    "jsr:@std/streams@^1.1.1": "1.1.1",
+    "jsr:@std/testing@1": "1.0.19",
+    "npm:@graphql-tools/schema@10.0.25": "10.0.25_graphql@16.11.0",
+    "npm:@remix-run/headers@~0.21.1": "0.21.1",
     "npm:@types/node@*": "24.2.0",
-    "npm:graphql-http@1.22.4": "1.22.4_graphql@16.10.0",
+    "npm:graphql-http@1.22.4": "1.22.4_graphql@16.11.0",
     "npm:graphql-tag@1.1.0": "1.1.0",
-    "npm:graphql-upload-ts@^2.1.3": "2.1.3_graphql@16.10.0",
+    "npm:graphql-upload-ts@^2.1.3": "2.1.3_graphql@16.11.0",
     "npm:graphql@16.10.0": "16.10.0",
+    "npm:graphql@^16.10.0": "16.11.0",
     "npm:graphql@^16.11.0": "16.11.0",
     "npm:object-path@~0.11.8": "0.11.8",
     "npm:path-to-regexp@^6.3.0": "6.3.0",
@@ -47,6 +55,12 @@
         "npm:xss"
       ]
     },
+    "@nyoxis/multipart-parser-streaming@0.17.0": {
+      "integrity": "21745ee1417242b6b3590a1c24ee2209fad1b8053fa84496949584df66e51afe",
+      "dependencies": [
+        "npm:@remix-run/headers"
+      ]
+    },
     "@oak/commons@1.0.1": {
       "integrity": "889ff210f0b4292591721be07244ecb1b5c118742f5273c70cf30d7cd4184d0c",
       "dependencies": [
@@ -58,8 +72,8 @@
         "jsr:@std/media-types@1"
       ]
     },
-    "@oak/oak@17.1.6": {
-      "integrity": "c7eef2eec733fba8e72b679bba3b8cf2fceccf5ef489a8b8fb43571908c0335d",
+    "@oak/oak@17.2.0": {
+      "integrity": "938537a92fc7922a46a9984696c65fb189c9baad164416ac3e336768a9ff0cd1",
       "dependencies": [
         "jsr:@oak/commons",
         "jsr:@std/assert@1",
@@ -70,8 +84,8 @@
         "npm:path-to-regexp"
       ]
     },
-    "@std/assert@1.0.15": {
-      "integrity": "d64018e951dbdfab9777335ecdb000c0b4e3df036984083be219ce5941e4703b",
+    "@std/assert@1.0.19": {
+      "integrity": "eaada96ee120cb980bc47e040f82814d786fe8162ecc53c91d8df60b8755991e",
       "dependencies": [
         "jsr:@std/internal@^1.0.12"
       ]
@@ -79,29 +93,37 @@
     "@std/bytes@1.0.6": {
       "integrity": "f6ac6adbd8ccd99314045f5703e23af0a68d7f7e58364b47d2c7f408aeb5820a"
     },
-    "@std/cli@1.0.23": {
-      "integrity": "bf95b7a9425ba2af1ae5a6359daf58c508f2decf711a76ed2993cd352498ccca"
+    "@std/cli@1.0.30": {
+      "integrity": "769446536522d0417d7127ebcabcafac1ab0ce6766d0eb3fca1d36326fe98d13"
     },
-    "@std/crypto@1.0.5": {
-      "integrity": "0dcfbb319fe0bba1bd3af904ceb4f948cde1b92979ec1614528380ed308a3b40"
+    "@std/crypto@1.1.0": {
+      "integrity": "b8d6d0a6377a32b213af2661ed7bf1062d94feac0c57def5526a8e74a95c3ec8"
     },
     "@std/encoding@1.0.10": {
       "integrity": "8783c6384a2d13abd5e9e87a7ae0520a30e9f56aeeaa3bdf910a3eaaf5c811a1"
     },
-    "@std/fmt@1.0.8": {
-      "integrity": "71e1fc498787e4434d213647a6e43e794af4fd393ef8f52062246e06f7e372b7"
+    "@std/expect@1.0.19": {
+      "integrity": "25271785688c7ff902fa54875d6aa4001f552c5578f7f0fefb5b5aac1fc2ed8a",
+      "dependencies": [
+        "jsr:@std/assert@^1.0.19",
+        "jsr:@std/internal@^1.0.13",
+        "jsr:@std/path@^1.1.4"
+      ]
     },
-    "@std/fs@1.0.19": {
-      "integrity": "051968c2b1eae4d2ea9f79a08a3845740ef6af10356aff43d3e2ef11ed09fb06"
+    "@std/fmt@1.0.10": {
+      "integrity": "90dfba288802ac6de82fb31d0917eb9e4450b9925b954d5e51fc29ac07419db5"
     },
-    "@std/html@1.0.5": {
-      "integrity": "4e2d693f474cae8c16a920fa5e15a3b72267b94b84667f11a50c6dd1cb18d35e"
+    "@std/fs@1.0.24": {
+      "integrity": "f3061b45b81673a2bece689da041df32d174be064c89eb6397fb5718d3fb7877"
+    },
+    "@std/html@1.0.7": {
+      "integrity": "175c818905a6e75743c69c251395e273d82698e58cfe7dd76268d70e28b8d8fe"
     },
     "@std/http@0.224.5": {
       "integrity": "b03b5d1529f6c423badfb82f6640f9f2557b4034cd7c30655ba5bb447ff750a4"
     },
-    "@std/http@1.0.21": {
-      "integrity": "abb5c747651ee6e3ea6139858fd9b1810d2c97f53a5e6722f3b6d27a6d263edc",
+    "@std/http@1.1.1": {
+      "integrity": "e343a9a80aea07c716b91be5c79df764144430ad2dd7c9121ed7443f08dc74f7",
       "dependencies": [
         "jsr:@std/cli",
         "jsr:@std/encoding@^1.0.10",
@@ -110,12 +132,12 @@
         "jsr:@std/html",
         "jsr:@std/media-types@^1.1.0",
         "jsr:@std/net",
-        "jsr:@std/path@^1.1.2",
+        "jsr:@std/path@^1.1.5",
         "jsr:@std/streams"
       ]
     },
-    "@std/internal@1.0.12": {
-      "integrity": "972a634fd5bc34b242024402972cd5143eac68d8dffaca5eaa4dba30ce17b027"
+    "@std/internal@1.0.14": {
+      "integrity": "291516b3d4c35024d6ffbc0a9df5bf4c64116e05b50012cf846710152d2ffdf7"
     },
     "@std/media-types@1.1.0": {
       "integrity": "c9d093f0c05c3512932b330e3cc1fe1d627b301db33a4c2c2185c02471d6eaa4"
@@ -123,50 +145,60 @@
     "@std/net@1.0.6": {
       "integrity": "110735f93e95bb9feb95790a8b1d1bf69ec0dc74f3f97a00a76ea5efea25500c"
     },
-    "@std/path@1.1.2": {
-      "integrity": "c0b13b97dfe06546d5e16bf3966b1cadf92e1cc83e56ba5476ad8b498d9e3038",
+    "@std/path@1.1.5": {
+      "integrity": "ccea00982ea28c36becaf6e62f855406c76a8c32d462f66f415bbb7d83a271bc",
       "dependencies": [
-        "jsr:@std/internal@^1.0.10"
+        "jsr:@std/internal@^1.0.14"
       ]
     },
-    "@std/streams@1.0.13": {
-      "integrity": "772d208cd0d3e5dac7c1d9e6cdb25842846d136eea4a41a62e44ed4ab0c8dd9e"
+    "@std/streams@1.1.1": {
+      "integrity": "92556d350e537e9dce527a6d08f6f15be3ff65e656079dea69d15252187c7613"
+    },
+    "@std/testing@1.0.19": {
+      "integrity": "f4236172365b216728dc3cc8b5e80a9f4c33083d1e4ede7613d5b25b4014898e",
+      "dependencies": [
+        "jsr:@std/assert@^1.0.19",
+        "jsr:@std/internal@^1.0.14"
+      ]
     }
   },
   "npm": {
-    "@graphql-tools/merge@9.1.1_graphql@16.10.0": {
+    "@graphql-tools/merge@9.1.1_graphql@16.11.0": {
       "integrity": "sha512-BJ5/7Y7GOhTuvzzO5tSBFL4NGr7PVqTJY3KeIDlVTT8YLcTXtBR+hlrC3uyEym7Ragn+zyWdHeJ9ev+nRX1X2w==",
       "dependencies": [
         "@graphql-tools/utils",
-        "graphql@16.10.0",
+        "graphql@16.11.0",
         "tslib"
       ]
     },
-    "@graphql-tools/schema@10.0.25_graphql@16.10.0": {
+    "@graphql-tools/schema@10.0.25_graphql@16.11.0": {
       "integrity": "sha512-/PqE8US8kdQ7lB9M5+jlW8AyVjRGCKU7TSktuW3WNKSKmDO0MK1wakvb5gGdyT49MjAIb4a3LWxIpwo5VygZuw==",
       "dependencies": [
         "@graphql-tools/merge",
         "@graphql-tools/utils",
-        "graphql@16.10.0",
+        "graphql@16.11.0",
         "tslib"
       ]
     },
-    "@graphql-tools/utils@10.9.1_graphql@16.10.0": {
+    "@graphql-tools/utils@10.9.1_graphql@16.11.0": {
       "integrity": "sha512-B1wwkXk9UvU7LCBkPs8513WxOQ2H8Fo5p8HR1+Id9WmYE5+bd51vqN+MbrqvWczHCH2gwkREgHJN88tE0n1FCw==",
       "dependencies": [
         "@graphql-typed-document-node/core",
         "@whatwg-node/promise-helpers",
         "cross-inspect",
         "dset",
-        "graphql@16.10.0",
+        "graphql@16.11.0",
         "tslib"
       ]
     },
-    "@graphql-typed-document-node/core@3.2.0_graphql@16.10.0": {
+    "@graphql-typed-document-node/core@3.2.0_graphql@16.11.0": {
       "integrity": "sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==",
       "dependencies": [
-        "graphql@16.10.0"
+        "graphql@16.11.0"
       ]
+    },
+    "@remix-run/headers@0.21.1": {
+      "integrity": "sha512-DRhRveigepAQDUIi0MrOFhpcl3/KTv/fkpIhulv7Asv1pUwM8RpY2ENjdI8lfii6Z3MEsWtYhGt6If8bi6bYpQ=="
     },
     "@types/node@24.2.0": {
       "integrity": "sha512-3xyG3pMCq3oYCNg7/ZP+E1ooTaGB4cG8JWRsqqOYQdbWNY4zbaV0Ennrd7stjiJEFZCaybcIgpTjJWHRfBSIDw==",
@@ -204,20 +236,20 @@
     "dset@3.1.4": {
       "integrity": "sha512-2QF/g9/zTaPDc3BjNcVTGoBbXBgYfMTTceLaYcFJ/W9kggFUkhxD/hMEeuLKbugyef9SqAx8cpgwlIP/jinUTA=="
     },
-    "graphql-http@1.22.4_graphql@16.10.0": {
+    "graphql-http@1.22.4_graphql@16.11.0": {
       "integrity": "sha512-OC3ucK988teMf+Ak/O+ZJ0N2ukcgrEurypp8ePyJFWq83VzwRAmHxxr+XxrMpxO/FIwI4a7m/Fzv3tWGJv0wPA==",
       "dependencies": [
-        "graphql@16.10.0"
+        "graphql@16.11.0"
       ]
     },
     "graphql-tag@1.1.0": {
       "integrity": "sha512-564l+LhSopvNPYKp8Bq0UkUTE3+/8OSVen2QSaCF7TSK3WccpYh+Uw6TStiMpwCU10kXSMLukZTcVdD3vmBRWw=="
     },
-    "graphql-upload-ts@2.1.3_graphql@16.10.0": {
+    "graphql-upload-ts@2.1.3_graphql@16.11.0": {
       "integrity": "sha512-ylGVSOy+mpW4IyJyUuAcX2pJNUbjimIENMEYN6oZZ0A7mCH/RAVhFd5UpvJiP+seghvH6mhTk2QQa0mGkMJOag==",
       "dependencies": [
         "busboy",
-        "graphql@16.10.0",
+        "graphql@16.11.0",
         "http-errors",
         "object-path"
       ]
